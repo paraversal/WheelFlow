@@ -41,7 +41,7 @@ struct MainWindowContents: View {
 			.padding()
 			}
 			
-			SettingsView(hideOnFocusedTrigger: $hideOnFocusedTrigger)
+			SettingsView(selectedAppPage: $selectedItem, hideOnFocusedTrigger: $hideOnFocusedTrigger)
 			.padding(10)
 			Divider()
 			
@@ -109,18 +109,24 @@ struct ListAppView: View {
 }
 
 struct SettingsView: View {
+	@Binding var selectedAppPage: Int
 	@Binding var hideOnFocusedTrigger: Bool
 	
 	var body: some View {
 		VStack {
-			HStack {
-				Form { KeyboardShortcuts.Recorder("Primary:", name: .primaryKeyDown) }
-				Form { KeyboardShortcuts.Recorder("Secondary:", name: .secondaryKeyDown) }
+			// APP PAGE SHORTCUTS
+			switch selectedAppPage{
+				case 1:
+					Form { KeyboardShortcuts.Recorder("Primary Page:", name: .primaryKeyDown) }.padding(.bottom, 5)
+				case 2:
+					Form { KeyboardShortcuts.Recorder("Secondary Page:", name: .secondaryKeyDown) }.padding(.bottom, 5)
+				default:
+					EmptyView()
 			}
-			.padding(.bottom, 5)
+			
+			// HIDE ACTIVE APPS TRIGGER
 			Toggle("Hide active apps when reselected", isOn: $hideOnFocusedTrigger)
 				.toggleStyle(.switch)
-				
 		}
 	}
 }
@@ -178,7 +184,6 @@ struct AddAppView: View {
 
 	
 }
-
 
 struct AppListView_Previews: PreviewProvider {
 		
